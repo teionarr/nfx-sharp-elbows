@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "personas": [
+    {
+      "id": "james-currier",
+      "name": "James Currier",
+      "firm": "NFX",
+      "role": "General Partner",
+      "photo": "James.png",
+      "tags": ["network-effects", "marketplaces", "growth", "seed"],
+      "txtFile": "james-currier.txt"
+    },
+    {
+      "id": "pete-flint",
+      "name": "Pete Flint",
+      "firm": "NFX",
+      "role": "General Partner",
+      "photo": "Pete.png",
+      "tags": ["marketplaces", "proptech", "ai-first", "seed"],
+      "txtFile": "pete-flint.txt"
+    },
+    {
+      "id": "gigi-levy-weiss",
+      "name": "Gigi Levy-Weiss",
+      "firm": "NFX",
+      "role": "General Partner",
+      "photo": "Gigi.png",
+      "tags": ["ai-agents", "gaming", "network-effects", "israel"],
+      "txtFile": "gigi-levy-weiss.txt"
+    },
+    {
+      "id": "morgan-beller",
+      "name": "Morgan Beller",
+      "firm": "NFX",
+      "role": "General Partner",
+      "photo": "Morgan.png",
+      "tags": ["web3", "fintech", "deeptech", "marketplaces"],
+      "txtFile": "morgan-beller.txt"
+    },
+    {
+      "id": "omri-amirav-drory",
+      "name": "Omri Drory, Ph.D.",
+      "firm": "NFX",
+      "role": "General Partner",
+      "photo": "Omri.png",
+      "tags": ["techbio", "longevity", "synthetic-biology", "ai"],
+      "txtFile": "omri-amirav-drory.txt"
+    },
+    {
+      "id": "anna-pinol",
+      "name": "Anna Piñol",
+      "firm": "NFX",
+      "role": "Partner",
+      "photo": "Anna.png",
+      "tags": ["seed", "network-effects", "marketplaces", "fintech"],
+      "txtFile": "anna-pinol.txt"
+    },
+    {
+      "id": "sarai-bronfeld",
+      "name": "Sarai Bronfeld",
+      "firm": "NFX",
+      "role": "Partner",
+      "photo": "Sarai.png",
+      "tags": ["ai", "cybersecurity", "fintech", "israel"],
+      "txtFile": "sarai-bronfeld.txt"
+    }
+  ]
+}
