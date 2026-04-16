@@ -57,6 +57,9 @@ export function reducer(state, event) {
   if (event.type === E.SNAPSHOT_SAVED) {
     return { ...state, snapshotUrl: event.payload.url }
   }
+  if (event.type === E.INTEREST_CLASSIFIED) {
+    return { ...state, interests: { ...state.interests, [event.payload.personaId]: event.payload.interested } }
+  }
 
   switch (state.phase) {
     case S.IDLE:
@@ -85,9 +88,6 @@ export function reducer(state, event) {
     }
 
     case S.COMPLETE: {
-      if (event.type === E.INTEREST_CLASSIFIED) {
-        return { ...state, interests: { ...state.interests, [event.payload.personaId]: event.payload.interested } }
-      }
       // Allow re-running with new selection without full reset
       if (event.type === E.PERSONAS_SELECTED) {
         const next = { ...state, selectedPersonaIds: event.payload.ids, feedbacks: {}, interests: {}, snapshotUrl: null }
