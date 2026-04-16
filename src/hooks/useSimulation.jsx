@@ -44,6 +44,20 @@ export function SimulationProvider({ children }) {
     streamBuffersRef.current = {}
     setStreamDisplay({})
 
+    // Simple concurrency limiter — max 3 Gemini calls at once to avoid rate limits
+    const CONCURRENCY = 3
+    const semaphore = { running: 0, queue: [] }
+    function acquire() {
+      return new Promise(resolve => {
+        if (semaphore.running < CONCURRENCY) { semaphore.running++; resolve() }
+        else semaphore.queue.push(resolve)
+      })
+    }
+    function release() {
+      semaphore.running--
+      if (semaphore.queue.length) { semaphore.running++; semaphore.queue.shift()() }
+    }
+
     const run = async () => {
       try {
         const feedbacks = {}
@@ -51,7 +65,14 @@ export function SimulationProvider({ children }) {
         await Promise.all(
           activePersonas.map(async persona => {
             streamBuffersRef.current[persona.id] = ''
+            await acquire()
             try {
+              // 2-minute timeout per request — prevents silent hangs
+              const timeoutSignal = AbortSignal.timeout(120_000)
+              const combinedSignal = AbortSignal.any
+                ? AbortSignal.any([controller.signal, timeoutSignal])
+                : controller.signal
+
               await generatePartnerFeedback({
                 persona,
                 deckBase64:   state.deckBase64,
@@ -62,20 +83,26 @@ export function SimulationProvider({ children }) {
                 },
                 onDone: (fullText) => {
                   feedbacks[persona.id] = fullText
-                  // Classify interest in parallel — don't await, update as it resolves
                   classifyInterest(fullText, classifyController.signal)
                     .then(result => {
                       dispatch({ type: E.INTEREST_CLASSIFIED, payload: { personaId: persona.id, interested: result } })
                     })
                     .catch(err => console.error('[interest] error', persona.id, err))
                 },
-                signal: controller.signal,
+                signal: combinedSignal,
               })
             } catch (err) {
-              if (err.name === 'AbortError') return
+              if (err.name === 'AbortError') {
+                // Timeout — show a message rather than silent "Waiting…"
+                if (!controller.signal.aborted)
+                  feedbacks[persona.id] = '_Request timed out. Try again with fewer partners._'
+                return
+              }
               const msg = err?.message ?? String(err)
               console.error(`[feedback] ${persona.name} error:`, msg)
-              feedbacks[persona.id] = `[Error: ${msg}]`
+              feedbacks[persona.id] = `_Could not load feedback: ${msg}_`
+            } finally {
+              release()
             }
           })
         )
