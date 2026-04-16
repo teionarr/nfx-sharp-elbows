@@ -1,5 +1,5 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
-import { SimulationProvider } from './hooks/useSimulation.js'
+import { SimulationProvider } from './hooks/useSimulation.jsx'
 import HomePage from './pages/HomePage.jsx'
 import SnapshotPage from './pages/SnapshotPage.jsx'
 

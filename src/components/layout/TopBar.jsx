@@ -9,10 +9,18 @@ export default function TopBar() {
 
       <div className="flex-1" />
 
-      {/* Disclaimer */}
-      <span className="text-[10px] text-muted/50 tracking-wide uppercase hidden sm:block">
-        Unofficial AI simulator · not affiliated with NFX
-      </span>
+      {/* Disclaimer + credits */}
+      <div className="flex flex-col items-end gap-0.5 hidden sm:flex">
+        <span className="text-[10px] text-muted/50 tracking-wide uppercase">
+          Unofficial AI simulator · not affiliated with NFX
+        </span>
+        <span className="text-[10px] text-muted/40 tracking-wide">
+          Created by{' '}
+          <a href="https://levitin.io" target="_blank" rel="noopener noreferrer" className="hover:text-muted/70 transition-colors">levitin.io</a>
+          {' · '}
+          <a href="https://github.com/teionarr/nfx-sharp-elbows" target="_blank" rel="noopener noreferrer" className="hover:text-muted/70 transition-colors">open source</a>
+        </span>
+      </div>
     </header>
   )
 }

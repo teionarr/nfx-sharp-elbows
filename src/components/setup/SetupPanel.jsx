@@ -1,4 +1,4 @@
-import { useSimulationContext } from '../../hooks/useSimulation.js'
+import { useSimulationContext } from '../../hooks/useSimulation.jsx'
 import { E, S } from '../../machine/reducer.js'
 import { canStart, isComplete, isLoading } from '../../machine/selectors.js'
 import PersonaChip from '../shared/PersonaChip.jsx'

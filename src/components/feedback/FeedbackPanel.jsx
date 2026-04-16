@@ -1,4 +1,4 @@
-import { useSimulationContext } from '../../hooks/useSimulation.js'
+import { useSimulationContext } from '../../hooks/useSimulation.jsx'
 import { S } from '../../machine/reducer.js'
 import { getActivePersonas } from '../../machine/selectors.js'
 import FeedbackCard from './FeedbackCard.jsx'
