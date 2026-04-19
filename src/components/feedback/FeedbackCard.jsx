@@ -3,9 +3,9 @@ import ReactMarkdown from 'react-markdown'
 import { cx, getInitials, getAvatarColor } from '../../utils.js'
 import { Avatar } from '../shared/PersonaChip.jsx'
 
-export default function FeedbackCard({ persona, text, streaming, interested }) {
+export default function FeedbackCard({ persona, text, streaming, interested, defaultCollapsed = false }) {
   const isEmpty = !text
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(defaultCollapsed)
 
   const borderColor = streaming
     ? 'rgba(255,255,255,0.08)'

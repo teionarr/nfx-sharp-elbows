@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { loadSnapshot } from '../services/snapshotService.js'
+import { loadSnapshot, loadLegacySnapshot } from '../services/snapshotService.js'
 import { loadPersonas } from '../services/personaLoader.js'
 import FeedbackCard from '../components/feedback/FeedbackCard.jsx'
 
@@ -12,16 +12,21 @@ export default function SnapshotPage() {
   const [error, setError]       = useState(null)
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    const id     = params.get('id')
+    const params  = new URLSearchParams(location.search)
+    const id      = params.get('id')
+    const legacyD = params.get('d')
 
-    if (!id) {
-      setError('No snapshot ID found in URL.')
+    if (!id && !legacyD) {
+      setError('No snapshot found in URL.')
       setLoading(false)
       return
     }
 
-    Promise.all([loadSnapshot(id), loadPersonas()])
+    const snapPromise = id
+      ? loadSnapshot(id)
+      : loadLegacySnapshot(legacyD)
+
+    Promise.all([snapPromise, loadPersonas()])
       .then(([snap, loadedPersonas]) => {
         setSnapshot(snap)
         setPersonas(loadedPersonas)
@@ -105,6 +110,7 @@ export default function SnapshotPage() {
             text={snapshot.feedbacks?.[persona.id] ?? ''}
             streaming={false}
             interested={snapshot.interests?.[persona.id]}
+            defaultCollapsed={true}
           />
         ))}
       </div>

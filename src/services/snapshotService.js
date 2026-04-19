@@ -40,3 +40,30 @@ export async function loadSnapshot(id) {
   if (!res.ok) throw new Error(`Snapshot not found (${res.status})`)
   return res.json()
 }
+
+// ─── Legacy: decompress old ?d= URL-hash snapshots ───────────────────────────
+export async function loadLegacySnapshot(b64url) {
+  let b64 = b64url.replace(/-/g, '+').replace(/_/g, '/')
+  while (b64.length % 4) b64 += '='
+  const binary = atob(b64)
+  const bytes  = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+
+  const stream = new DecompressionStream('gzip')
+  const writer = stream.writable.getWriter()
+  writer.write(bytes)
+  writer.close()
+
+  const reader = stream.readable.getReader()
+  const chunks = []
+  for (;;) {
+    const { value, done } = await reader.read()
+    if (done) break
+    chunks.push(value)
+  }
+  const total  = chunks.reduce((s, c) => s + c.length, 0)
+  const result = new Uint8Array(total)
+  let offset = 0
+  for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.length }
+  return JSON.parse(new TextDecoder().decode(result))
+}
