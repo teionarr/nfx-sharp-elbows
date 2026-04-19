@@ -13,15 +13,15 @@ export default function SnapshotPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
-    const data   = params.get('d')
+    const id     = params.get('id')
 
-    if (!data) {
-      setError('No snapshot data found in URL.')
+    if (!id) {
+      setError('No snapshot ID found in URL.')
       setLoading(false)
       return
     }
 
-    Promise.all([loadSnapshot(data), loadPersonas()])
+    Promise.all([loadSnapshot(id), loadPersonas()])
       .then(([snap, loadedPersonas]) => {
         setSnapshot(snap)
         setPersonas(loadedPersonas)
